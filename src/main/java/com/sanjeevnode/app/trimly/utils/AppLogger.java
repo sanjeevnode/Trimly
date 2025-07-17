@@ -19,8 +19,14 @@ public class AppLogger {
     }
 
     private String prepareMessage(String message, Object... args) {
+        // If no args, return plain message
+        if (args == null || args.length == 0) {
+            return prefix + message;
+        }
+        // If args present, use String.format
         return prefix + String.format(message, args);
     }
+
 
     public void info(String message, Object... args) {
         logger.info(prepareMessage(message, args));

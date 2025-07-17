@@ -5,6 +5,7 @@ import com.sanjeevnode.app.trimly.service.impl.UserDetailsServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -32,6 +33,7 @@ public class SecurityConfiguration {
                         req -> req
                                 .requestMatchers("/auth/login","/auth/health","/auth/register","/auth/validate","/api-docs/**","/swagger-ui/**")
                                 .permitAll()
+                                .requestMatchers(HttpMethod.GET, "/{shortCode:[a-zA-Z0-9]+}").permitAll()
                                 .anyRequest()
                                 .authenticated()
                 ).userDetailsService(userDetailsService)

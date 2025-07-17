@@ -9,6 +9,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -71,6 +72,18 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse> handleExpiredJwtException(ExpiredJwtException ex) {
         log.warn("JWT token expired: %s", ex.getMessage());
         return buildErrorResponse(HttpStatus.UNAUTHORIZED, "JWT token expired", null);
+    }
+
+    @ExceptionHandler(UrlNotFoundException.class)
+    public ResponseEntity<ApiResponse> handleUrlNotFoundException(UrlNotFoundException ex) {
+        log.warn("URL not found: %s", ex.getMessage());
+        return buildErrorResponse(HttpStatus.NOT_FOUND, "URL not found: " + ex.getMessage(), null);
+    }
+
+    @ExceptionHandler(UrlRedirectException.class)
+    public RedirectView handleUrlRedirectException(UrlRedirectException ex) {
+        log.warn("URL redirect error: %s", ex.getMessage());
+        return  new RedirectView(ex.getMessage());
     }
 
 }

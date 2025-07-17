@@ -1,7 +1,7 @@
 package com.sanjeevnode.app.trimly.controller;
 
 import com.sanjeevnode.app.trimly.dto.UserRequestDTO;
-import com.sanjeevnode.app.trimly.service.AuthService;
+import com.sanjeevnode.app.trimly.service.UserService;
 import com.sanjeevnode.app.trimly.utils.ApiResponse;
 import com.sanjeevnode.app.trimly.utils.AppLogger;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class AuthController {
 
-    private final AuthService authService;
+    private final UserService authService;
     private final AppLogger logger = new AppLogger(AuthController.class, "AuthController");
 
     @GetMapping("/health")
