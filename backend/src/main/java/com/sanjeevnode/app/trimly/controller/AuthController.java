@@ -23,7 +23,7 @@ public class AuthController {
     @GetMapping("/health")
     public String healthCheck() {
         logger.info("Health check endpoint hit");
-        return "Auth Service is running";
+        return "Trimly API is running!";
     }
 
     @PostMapping("/register")
