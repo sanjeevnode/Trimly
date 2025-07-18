@@ -1,0 +1,27 @@
+name: Deploy Trimly to EC2
+
+on:
+  push:
+    branches:
+      - deploy
+
+jobs:
+  deploy:
+    name: Deploy to EC2 Server
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up SSH key
+        run: |
+          echo "${{ secrets.SERVICE_KEY }}" > private_key.pem
+          chmod 600 private_key.pem
+
+      - name: Deploy via SSH
+        run: |
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.SERVICE_USER }}@${{ secrets.SERVICE_HOST }} 'bash ~/deploy.sh'
+
+      - name: Done
+        run: echo "Deployment successful!"
