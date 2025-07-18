@@ -63,6 +63,18 @@ public class UrlMappingService {
                 .orElseThrow(() -> new UrlRedirectException(shortUrl));
         logger.info("Original URL retrieved: " + urlMapping.getOriginalUrl());
         urlMapping.setClickCount(urlMapping.getClickCount()+1);
+        urlMappingRepository.save(urlMapping);
         return urlMapping.getOriginalUrl();
     }
+
+    public ApiResponse getUrlByUser(){
+        var user = userService.getLoggedInUser();
+        var urls = urlMappingRepository.findByUserId(user.getId());
+        return   ApiResponse.builder()
+                .status(HttpStatus.OK)
+                .message("URLs retrieved successfully")
+                .data(urls)
+                .build();
+    }
+
 }

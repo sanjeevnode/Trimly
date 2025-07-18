@@ -31,7 +31,7 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         req -> req
-                                .requestMatchers("/auth/login","/auth/health","/auth/register","/auth/validate","/api-docs/**","/swagger-ui/**")
+                                .requestMatchers("/api/auth/login","/api/auth/health","/api/auth/register","/api/auth/validate","/api-docs/**","/swagger-ui/**")
                                 .permitAll()
                                 .requestMatchers(HttpMethod.GET, "/{shortCode:[a-zA-Z0-9]+}").permitAll()
                                 .anyRequest()

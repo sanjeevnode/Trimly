@@ -29,7 +29,7 @@ public class UrlMappingController {
      * @param request the URL request containing the original URL and user ID
      * @return ResponseEntity with ApiResponse containing the shortened URL
      */
-    @PostMapping("/trim")
+    @PostMapping("/api/trim")
     @Operation(summary = "Trim a URL")
     public ResponseEntity<ApiResponse> shortenUrl(@Valid @RequestBody UrlRequestDTO request) {
         logger.info("Trim URL endpoint hit with request: " + request);
@@ -41,6 +41,13 @@ public class UrlMappingController {
     public RedirectView redirectToOriginalUrl(@PathVariable String shortUrl) {
         logger.info("Redirect request received for shortCode: " + shortUrl);
         return new RedirectView(urlService.getOriginalUrl(shortUrl));
+    }
+
+    @GetMapping("/api/list-urls")
+    @Operation(summary = "List all URLs for the logged-in user")
+    public ResponseEntity<ApiResponse> listUrls(Principal principal) {
+        logger.info("List URLs endpoint hit for user: " + principal.getName());
+        return urlService.getUrlByUser().buildResponse();
     }
 
 }
