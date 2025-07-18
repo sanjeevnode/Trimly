@@ -24,4 +24,4 @@ jobs:
           key: ${{ secrets.SERVICE_KEY }}
           script: |
             echo "Connected to EC2"
-            bash /home/ubuntu/deploy.sh
+            ./deploy.sh
