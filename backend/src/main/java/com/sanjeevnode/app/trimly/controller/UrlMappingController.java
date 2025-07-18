@@ -36,7 +36,7 @@ public class UrlMappingController {
         return urlService.shortenUrl(request).buildResponse();
     }
 
-    @GetMapping("/{shortUrl}")
+    @GetMapping("/u/{shortUrl}")
     @Operation(summary = "Redirect to original URL")
     public RedirectView redirectToOriginalUrl(@PathVariable String shortUrl) {
         logger.info("Redirect request received for shortCode: " + shortUrl);

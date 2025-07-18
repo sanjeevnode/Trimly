@@ -31,9 +31,19 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         req -> req
-                                .requestMatchers("/api/auth/login","/api/auth/health","/api/auth/register","/api/auth/validate","/api-docs/**","/swagger-ui/**")
+                                .requestMatchers(
+                                        "/api/auth/login",
+                                        "/api/auth/health",
+                                        "/api/auth/register",
+                                        "/api/auth/validate",
+                                        "/api-docs/**",
+                                        "/swagger-ui/**",
+                                        "/index.html",
+                                        "/assets/**",
+                                        "/favicon.ico"
+                                )
                                 .permitAll()
-                                .requestMatchers(HttpMethod.GET, "/{shortCode:[a-zA-Z0-9]+}").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/u/{shortCode:[a-zA-Z0-9]+}").permitAll()
                                 .anyRequest()
                                 .authenticated()
                 ).userDetailsService(userDetailsService)
