@@ -15,20 +15,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Check secrets
+        run: |
+          if [ -z "${{ secrets.SERVICE_USER }}" ] || [ -z "${{ secrets.SERVICE_HOST }}" ] || [ -z "${{ secrets.SERVICE_KEY }}" ]; then
+            echo " Missing one or more required secrets."
+            exit 1
+          fi
+
       - name: Set up SSH private key
         run: |
           echo "${{ secrets.SERVICE_KEY }}" > private_key.pem
           chmod 600 private_key.pem
-
-      - name: Debug check (optional - remove in production)
-        run: |
-          echo "User: ${{ secrets.SERVICE_USER }}"
-          echo "Host: ${{ secrets.SERVICE_HOST }}"
-          echo "Key is present: ${{ secrets.SERVICE_KEY != '' }}"
 
       - name: Deploy via SSH
         run: |
           ssh -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.SERVICE_USER }}@${{ secrets.SERVICE_HOST }} 'bash ~/deploy.sh'
 
       - name: Done
-        run: echo "Deployment successful"
+        run: echo "✅ Deployment successful"
