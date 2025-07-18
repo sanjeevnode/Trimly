@@ -9,19 +9,26 @@ jobs:
   deploy:
     name: Deploy to EC2 Server
     runs-on: ubuntu-latest
+    environment: DEPLOY
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up SSH key
+      - name: Set up SSH private key
         run: |
           echo "${{ secrets.SERVICE_KEY }}" > private_key.pem
           chmod 600 private_key.pem
+
+      - name: Debug check (optional - remove in production)
+        run: |
+          echo "User: ${{ secrets.SERVICE_USER }}"
+          echo "Host: ${{ secrets.SERVICE_HOST }}"
+          echo "Key is present: ${{ secrets.SERVICE_KEY != '' }}"
 
       - name: Deploy via SSH
         run: |
           ssh -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.SERVICE_USER }}@${{ secrets.SERVICE_HOST }} 'bash ~/deploy.sh'
 
       - name: Done
-        run: echo "Deployment successful!"
+        run: echo "Deployment successful"
