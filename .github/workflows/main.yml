@@ -7,29 +7,21 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to EC2 Server
+    name: Deploy to EC2
     runs-on: ubuntu-latest
-    environment: DEPLOY
+
+    environment: deploy
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Check secrets
-        run: |
-          if [ -z "${{ secrets.SERVICE_USER }}" ] || [ -z "${{ secrets.SERVICE_HOST }}" ] || [ -z "${{ secrets.SERVICE_KEY }}" ]; then
-            echo " Missing one or more required secrets."
-            exit 1
-          fi
-
-      - name: Set up SSH private key
-        run: |
-          echo "${{ secrets.SERVICE_KEY }}" > private_key.pem
-          chmod 600 private_key.pem
-
       - name: Deploy via SSH
-        run: |
-          ssh -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.SERVICE_USER }}@${{ secrets.SERVICE_HOST }} 'bash ~/deploy.sh'
-
-      - name: Done
-        run: echo "✅ Deployment successful"
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVICE_HOST }}
+          username: ${{ secrets.SERVICE_USER }}
+          key: ${{ secrets.SERVICE_KEY }}
+          script: |
+            echo "Connected to EC2"
+            bash /home/ubuntu/deploy.sh
