@@ -1,0 +1,15 @@
+services:
+  trimly-postgres:
+    image: postgres:latest
+    container_name: trimly-postgres
+    environment:
+      POSTGRES_DB: trimly-db
+      POSTGRES_USER: trimly-user
+      POSTGRES_PASSWORD: trimly@db#123
+    ports:
+      - "7432:5432"
+    volumes:
+      - trimly-postgres-data:/var/lib/postgresql/data
+
+volumes:
+  trimly-postgres-data:
