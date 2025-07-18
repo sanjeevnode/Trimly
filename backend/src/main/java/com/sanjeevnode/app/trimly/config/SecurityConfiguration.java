@@ -37,10 +37,7 @@ public class SecurityConfiguration {
                                         "/api/auth/register",
                                         "/api/auth/validate",
                                         "/api-docs/**",
-                                        "/swagger-ui/**",
-                                        "/index.html",
-                                        "/assets/**",
-                                        "/favicon.ico"
+                                        "/swagger-ui/**"
                                 )
                                 .permitAll()
                                 .requestMatchers(HttpMethod.GET, "/u/{shortCode:[a-zA-Z0-9]+}").permitAll()
