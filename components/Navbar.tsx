@@ -12,8 +12,11 @@ import {
 import Link from "next/link"
 import GradientButton from "./custom/GradientButton"
 import NavItem from "./custom/NavItem"
+import { signOut, useSession } from "next-auth/react"
 
 export default function Navbar() {
+    const session = useSession();
+
     return (
         <nav className="fixed top-0 w-full border h-16 bg-white z-50">
             <div className="mx-auto max-w-7xl flex items-center justify-between px-4 py-2  h-full">
@@ -26,15 +29,35 @@ export default function Navbar() {
                 <div className="space-x-6 hidden sm:flex items-center justify-center">
                     <NavItem href="/" label="Home" />
 
-                    <NavItem href="/dashboard" label="Dashboard" />
+                    {
+                        session.status === "authenticated" && (
+                            <>
 
-                    <NavItem href="/profile" label="Profile" />
+                                <NavItem href="/dashboard" label="Dashboard" />
+
+                                <NavItem href="/profile" label="Profile" />
+                            </>
+                        )
+                    }
 
                     <NavItem href="/contact" label="Contact" />
 
-                    <Link href="/login">
-                        <GradientButton text="Login" />
-                    </Link>
+                    {
+                        session.status === "authenticated" ? (
+                            <Button
+                                variant="outline"
+                                className="rounded"
+                                onClick={() => signOut()}
+
+                            >
+                                Logout
+                            </Button>
+                        ) : (
+                            <Link href="/login">
+                                <GradientButton text="Login" />
+                            </Link>
+                        )
+                    }
                 </div>
 
                 {/* Mobile Menu */}
