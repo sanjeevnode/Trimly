@@ -1,0 +1,1 @@
+export { UserAlreadyExistsException } from "./userAlreadyExistsException";

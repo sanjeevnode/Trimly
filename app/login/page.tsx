@@ -1,14 +1,15 @@
 "use client"
 
 import { Input } from '@/components/ui/input';
-import { Link as LinkIcon, Eye, EyeOff } from 'lucide-react'
+import { Link as LinkIcon, Eye, EyeOff, Loader2Icon } from 'lucide-react'
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { RegisterUserData } from '@/types/registerUserType';
-import { registerUser } from '../actions/registerUser';
+import { registerUser } from '@/app/actions/userActions';
+import { UserAuthType } from '@/types/user';
 
 
 type Variant = "LOGIN" | "REGISTER";
@@ -48,43 +49,31 @@ export default function Login() {
         },
     });
 
-    const onSubmit: SubmitHandler<FieldValues> = (data) => {
-        setIsLoading(true);
-        // if (variant === "REGISTER") {
-        const userInfo: RegisterUserData = {
-            name: data.name,
-            email: data.email,
-            password: data.password,
+    const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+        try {
+            setIsLoading(true);
+            if (variant === "REGISTER") {
+                const userInfo: RegisterUserData = {
+                    name: data.name,
+                    email: data.email,
+                    password: data.password,
+                    authType: UserAuthType.CREDENTIALS,
+                };
+                await registerUser(userInfo)
+                router.push("/");
+            } else {
+                // Handle login
+            }
+        } catch (error: Error | unknown) {
+            if (error instanceof Error) {
+                toast.error(error.message);
+            } else {
+                toast.error("Something went wrong");
+            }
+
+        } finally {
+            setIsLoading(false);
         }
-        registerUser(userInfo)
-            .then(() => {
-                // signIn("credentials", data)
-                toast.success("Registered successfully");
-            })
-            .catch(() => toast.error("Something went wrong"))
-            .finally(() => setIsLoading(false));
-        // }
-        // if (variant === "LOGIN") {
-        //     signIn("credentials", {
-        //         ...data,
-        //         redirect: false,
-
-        //     })
-        //         .then((callback) => {
-        //             if (callback?.error) {
-        //                 toast.error("Invalid credentials")
-        //             }
-        //             if (callback?.ok && !callback?.error) {
-        //                 toast.success("Logged in successfully")
-        //                 router.push("/users")
-
-
-        //             }
-        //         })
-        //         .catch(() => toast.error("Something went wrong"))
-        //         .finally(() => setIsLoading(false));
-        // }
-        setIsLoading(false);
     };
 
 
@@ -193,9 +182,15 @@ export default function Login() {
 
                         <button
                             type="submit"
-                            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-md hover:shadow-lg transition-shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                            disabled={isLoading}
+                            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-md hover:shadow-lg transition-shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer"
                         >
-                            {
+                            {isLoading ? (
+                                <div className='flex items-center justify-center gap-2 w-full'>
+                                    <Loader2Icon className="animate-spin" />
+                                    <span>processing...</span>
+                                </div>
+                            ) :
                                 variant === "LOGIN" ? "Login" : "Register"
                             }
                         </button>
