@@ -1,6 +1,6 @@
 "use client"
 
-import { Link, Menu } from "lucide-react"
+import { Link as LinkIcon, Menu } from "lucide-react"
 import { Button } from "./ui/button"
 import {
     Sheet,
@@ -9,35 +9,32 @@ import {
     SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
+import Link from "next/link"
+import GradientButton from "./custom/GradientButton"
+import NavItem from "./custom/NavItem"
 
 export default function Navbar() {
     return (
         <nav className="fixed top-0 w-full border h-16 bg-white z-50">
-            <div className="mx-auto max-w-7xl flex items-center justify-between p-4">
+            <div className="mx-auto max-w-7xl flex items-center justify-between px-4 py-2  h-full">
                 <div className="flex items-center">
-                    <Link className="w-6 h-6 text-blue-500 rotate-45" />
-                    <span className="ml-2 text-xl font-bold">Trimly</span>
+                    <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-1 rounded">
+                        <LinkIcon className="w-6 h-6 text-white" />
+                    </div>
+                    <span className="ml-3 text-xl font-bold font-poppins gradient-text">Trimly</span>
                 </div>
-                <div className="space-x-4 hidden sm:flex">
-                    <Button variant="link" className="cursor-pointer">
-                        Home
-                    </Button>
+                <div className="space-x-6 hidden sm:flex items-center justify-center">
+                    <NavItem href="/" label="Home" />
 
-                    <Button variant="link" className="cursor-pointer">
-                        Dashboard
-                    </Button>
+                    <NavItem href="/dashboard" label="Dashboard" />
 
-                    <Button variant="link" className="cursor-pointer">
-                        Profile
-                    </Button>
+                    <NavItem href="/profile" label="Profile" />
 
-                    <Button variant="link" className="cursor-pointer">
-                        Contact
-                    </Button>
+                    <NavItem href="/contact" label="Contact" />
 
-                    <Button variant="outline" className="cursor-pointer">
-                        Login
-                    </Button>
+                    <Link href="/login">
+                        <GradientButton text="Login" />
+                    </Link>
                 </div>
 
                 {/* Mobile Menu */}
@@ -57,7 +54,7 @@ const MobileNavbar = () => {
                 </SheetTrigger>
                 <SheetContent className="w-[250px]">
                     <SheetHeader>
-                        <SheetTitle>
+                        <SheetTitle className="gradient-text">
                             Trimly
                         </SheetTitle>
                     </SheetHeader>
