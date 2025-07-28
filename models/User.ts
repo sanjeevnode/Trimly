@@ -38,7 +38,6 @@ const UserSchema = new Schema(
     },
     password: {
       type: String,
-      required: true,
       minlength: 6,
     },
     authType: {
@@ -54,9 +53,9 @@ const UserSchema = new Schema(
 
 // Hash password before saving
 UserSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
-
-  this.password = await bcrypt.hash(this.password, 12);
+  if (this.password && this.isModified("password")) {
+    this.password = await bcrypt.hash(this.password, 12);
+  }
   next();
 });
 

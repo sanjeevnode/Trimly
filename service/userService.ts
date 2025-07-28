@@ -8,7 +8,7 @@ export class UserService {
   static async createUser(userData: {
     name: string;
     email: string;
-    password: string;
+    password?: string;
     authType: UserAuthType;
   }): Promise<TUser> {
     await connectDB();
@@ -19,9 +19,20 @@ export class UserService {
         throw new UserAlreadyExistsException(userData.email);
       }
 
+      if (
+        userData.authType === UserAuthType.CREDENTIALS &&
+        !userData.password
+      ) {
+        throw new Error("Password is required for credentials authentication");
+      }
+
       const user = new User({
-        ...userData,
-        authType: userData.authType || UserAuthType.CREDENTIALS,
+        name: userData.name,
+        email: userData.email,
+        authType: userData.authType,
+        ...(userData.authType === UserAuthType.CREDENTIALS && userData.password
+          ? { password: userData.password }
+          : {}),
       });
       await user.save();
 

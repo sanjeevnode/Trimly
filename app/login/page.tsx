@@ -60,9 +60,22 @@ export default function Login() {
                     authType: UserAuthType.CREDENTIALS,
                 };
                 await registerUser(userInfo)
-                router.push("/");
+                toast.success("User registered successfully");
+                setVariant("LOGIN");
+
             } else {
-                // Handle login
+                const result = await signIn("credentials", {
+                    email: data.email,
+                    password: data.password,
+                    redirect: false,
+                });
+
+                if (result?.error) {
+                    toast.error(result.error);
+                } else {
+                    toast.success("Logged in successfully");
+                    router.push("/");
+                }
             }
         } catch (error: Error | unknown) {
             if (error instanceof Error) {

@@ -1,7 +1,6 @@
 "use client"
 
 import { Link as LinkIcon, Menu } from "lucide-react"
-import { Button } from "./ui/button"
 import {
     Sheet,
     SheetContent,
@@ -44,14 +43,7 @@ export default function Navbar() {
 
                     {
                         session.status === "authenticated" ? (
-                            <Button
-                                variant="outline"
-                                className="rounded"
-                                onClick={() => signOut()}
-
-                            >
-                                Logout
-                            </Button>
+                            <NavItem onClick={() => signOut()} label="Logout" />
                         ) : (
                             <Link href="/login">
                                 <GradientButton text="Login" />
@@ -69,6 +61,7 @@ export default function Navbar() {
 
 
 const MobileNavbar = () => {
+    const session = useSession();
     return (
         <div className="sm:hidden">
             <Sheet>
@@ -82,21 +75,30 @@ const MobileNavbar = () => {
                         </SheetTitle>
                     </SheetHeader>
                     <div className="flex flex-col space-y-2">
-                        <Button variant="link" className="cursor-pointer">
-                            Home
-                        </Button>
-                        <Button variant="link" className="cursor-pointer">
-                            Dashboard
-                        </Button>
-                        <Button variant="link" className="cursor-pointer">
-                            Profile
-                        </Button>
-                        <Button variant="link" className="cursor-pointer">
-                            Contact
-                        </Button>
-                        <Button variant="link" className="cursor-pointer">
-                            Login
-                        </Button>
+
+                        <NavItem href="/" label="Home" className="w-full  flex items-center justify-center" />
+
+
+                        {
+                            session.status === "authenticated" && (
+                                <>
+
+                                    <NavItem href="/dashboard" label="Dashboard" className="w-full  flex items-center justify-center" />
+
+                                    <NavItem href="/profile" label="Profile" className="w-full  flex items-center justify-center" />
+                                </>
+                            )
+                        }
+
+                        <NavItem href="/contact" label="Contact" className="w-full  flex items-center justify-center" />
+
+                        {
+                            session.status === "authenticated" ? (
+                                <NavItem onClick={() => signOut()} label="Logout" className="w-full  flex items-center justify-center" />
+                            ) : (
+                                <NavItem href="/login" label="Login" className="w-full  flex items-center justify-center" />
+                            )
+                        }
                     </div>
                 </SheetContent>
             </Sheet>
