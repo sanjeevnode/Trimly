@@ -8,9 +8,10 @@ interface NavItemProps {
     label: string;
     onClick?: () => void;
     className?: string;
+    decoration?: boolean;
 }
 
-const NavItem: React.FC<NavItemProps> = ({ href, label, onClick, className = '' }) => {
+const NavItem: React.FC<NavItemProps> = ({ href, label, onClick, className = '', decoration = true }) => {
     const baseClasses = `relative group py-2 text-sm font-medium cursor-pointer flex justify-center items-center ${className}`;
 
     const underline = (
@@ -25,7 +26,7 @@ const NavItem: React.FC<NavItemProps> = ({ href, label, onClick, className = '' 
                 className={baseClasses}
             >
                 <span className="">{label}</span>
-                {underline}
+                {decoration && underline}
             </Link>
         );
     }
@@ -37,7 +38,7 @@ const NavItem: React.FC<NavItemProps> = ({ href, label, onClick, className = '' 
             role="button"
         >
             <span className="">{label}</span>
-            {underline}
+            {decoration && underline}
         </span>
     );
 };

@@ -12,20 +12,23 @@ import Link from "next/link"
 import GradientButton from "./custom/GradientButton"
 import NavItem from "./custom/NavItem"
 import { signOut, useSession } from "next-auth/react"
+import { useState } from "react"
 
 export default function Navbar() {
     const session = useSession();
-
     return (
         <nav className="fixed top-0 w-full border h-16 bg-white z-50">
             <div className="mx-auto max-w-7xl flex items-center justify-between px-4 py-2  h-full">
-                <div className="flex items-center">
+                <Link href="/" className="flex items-center">
                     <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-1 rounded">
                         <LinkIcon className="w-6 h-6 text-white" />
                     </div>
                     <span className="ml-3 text-xl font-bold font-poppins gradient-text">Trimly</span>
-                </div>
+                </Link>
                 <div className="space-x-6 hidden sm:flex items-center justify-center">
+                    <span>
+                        {session.data?.user?.name ?? session.data?.user?.email ?? ""}
+                    </span>
                     <NavItem href="/" label="Home" />
 
                     {
@@ -62,9 +65,16 @@ export default function Navbar() {
 
 const MobileNavbar = () => {
     const session = useSession();
+    const [open, setOpen] = useState(false);
+
+    const handleItemClick = (action?: () => void) => {
+        if (action) action();
+        setOpen(false);
+    };
+
     return (
         <div className="sm:hidden">
-            <Sheet>
+            <Sheet open={open} onOpenChange={setOpen}>
                 <SheetTrigger>
                     <Menu className="cursor-pointer" />
                 </SheetTrigger>
@@ -76,27 +86,60 @@ const MobileNavbar = () => {
                     </SheetHeader>
                     <div className="flex flex-col space-y-2">
 
-                        <NavItem href="/" label="Home" className="w-full  flex items-center justify-center" />
-
+                        <NavItem
+                            decoration={false}
+                            href="/"
+                            label="Home"
+                            className="w-full flex items-center justify-center"
+                            onClick={() => setOpen(false)}
+                        />
 
                         {
                             session.status === "authenticated" && (
                                 <>
+                                    <NavItem
+                                        decoration={false}
+                                        href="/dashboard"
+                                        label="Dashboard"
+                                        className="w-full flex items-center justify-center"
+                                        onClick={() => setOpen(false)}
+                                    />
 
-                                    <NavItem href="/dashboard" label="Dashboard" className="w-full  flex items-center justify-center" />
-
-                                    <NavItem href="/profile" label="Profile" className="w-full  flex items-center justify-center" />
+                                    <NavItem
+                                        decoration={false}
+                                        href="/profile"
+                                        label="Profile"
+                                        className="w-full flex items-center justify-center"
+                                        onClick={() => setOpen(false)}
+                                    />
                                 </>
                             )
                         }
 
-                        <NavItem href="/contact" label="Contact" className="w-full  flex items-center justify-center" />
+                        <NavItem
+                            decoration={false}
+                            href="/contact"
+                            label="Contact"
+                            className="w-full flex items-center justify-center"
+                            onClick={() => setOpen(false)}
+                        />
 
                         {
                             session.status === "authenticated" ? (
-                                <NavItem onClick={() => signOut()} label="Logout" className="w-full  flex items-center justify-center" />
+                                <NavItem
+                                    decoration={false}
+                                    onClick={() => handleItemClick(() => signOut())}
+                                    label="Logout"
+                                    className="w-full flex items-center justify-center"
+                                />
                             ) : (
-                                <NavItem href="/login" label="Login" className="w-full  flex items-center justify-center" />
+                                <NavItem
+                                    decoration={false}
+                                    href="/login"
+                                    label="Login"
+                                    className="w-full flex items-center justify-center"
+                                    onClick={() => setOpen(false)}
+                                />
                             )
                         }
                     </div>

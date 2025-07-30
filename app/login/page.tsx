@@ -71,9 +71,8 @@ export default function Login() {
                 });
 
                 if (result?.error) {
-                    toast.error(result.error);
+                    throw new Error("Invalid credentials");
                 } else {
-                    toast.success("Logged in successfully");
                     router.push("/");
                 }
             }

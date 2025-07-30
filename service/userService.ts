@@ -30,9 +30,7 @@ export class UserService {
         name: userData.name,
         email: userData.email,
         authType: userData.authType,
-        ...(userData.authType === UserAuthType.CREDENTIALS && userData.password
-          ? { password: userData.password }
-          : {}),
+        password: userData.password,
       });
       await user.save();
 
