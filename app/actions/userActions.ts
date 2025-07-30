@@ -29,3 +29,14 @@ export async function registerUser(data: RegisterUserData) {
     throw new Error("Failed to register user");
   }
 }
+
+export async function findUserByEmail(email: string) {
+  try {
+    await connectToDB();
+    const user = await UserService.findUserByEmail(email);
+    return user;
+  } catch (error) {
+    console.error("Error finding user by email:", error);
+    throw new Error("Failed to find user");
+  }
+}

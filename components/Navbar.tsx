@@ -26,9 +26,6 @@ export default function Navbar() {
                     <span className="ml-3 text-xl font-bold font-poppins gradient-text">Trimly</span>
                 </Link>
                 <div className="space-x-6 hidden sm:flex items-center justify-center">
-                    <span>
-                        {session.data?.user?.name ?? session.data?.user?.email ?? ""}
-                    </span>
                     <NavItem href="/" label="Home" />
 
                     {

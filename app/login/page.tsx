@@ -72,8 +72,6 @@ export default function Login() {
 
                 if (result?.error) {
                     throw new Error("Invalid credentials");
-                } else {
-                    router.push("/");
                 }
             }
         } catch (error: Error | unknown) {
