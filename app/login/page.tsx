@@ -9,7 +9,7 @@ import toast from 'react-hot-toast';
 import { RegisterUserData } from '@/types/registerUserType';
 import { registerUser } from '@/app/actions/userActions';
 import { UserAuthType } from '@/types/user';
-import PasswordTextField from '@/components/custom/CustomTextField';
+import CustomTextField from '@/components/custom/CustomTextField';
 
 
 type Variant = "LOGIN" | "REGISTER";
@@ -110,7 +110,7 @@ export default function Login() {
                     </p>
                 </div>
 
-                <div className="bg-white rounded shadow-sm border p-8">
+                <div className="p-8">
                     <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
                         {
                             variant === "REGISTER" && (
@@ -129,26 +129,22 @@ export default function Login() {
                                 </div>
                             )
                         }
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Email address
-                            </label>
-                            <input
-                                {...register("email", { required: true })}
-                                type="email"
-                                required
-                                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                placeholder="Enter your email"
-                                disabled={isLoading}
-                            />
-                        </div>
+                        <CustomTextField
+                            type='email'
+                            label='Email Address'
+                            placeholder="Enter your email"
+                            disabled={isLoading}
+                            required
+                            className="w-full"
+                            {...register("email", { required: true })}
+                        />
 
-                        <PasswordTextField
+                        <CustomTextField
                             label="Password"
                             placeholder="Enter your password"
                             disabled={isLoading}
                             required
-                            className="w-full"
+                            isPassword={true}
                             {...register("password", { required: true, minLength: 6 })}
                         />
 

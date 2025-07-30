@@ -9,7 +9,6 @@ import {
     SheetTrigger,
 } from "@/components/ui/sheet"
 import Link from "next/link"
-import GradientButton from "./custom/GradientButton"
 import NavItem from "./custom/NavItem"
 import { signOut, useSession } from "next-auth/react"
 import { useState } from "react"
@@ -45,9 +44,7 @@ export default function Navbar() {
                         session.status === "authenticated" ? (
                             <NavItem onClick={() => signOut()} label="Logout" />
                         ) : (
-                            <Link href="/login">
-                                <GradientButton text="Login" />
-                            </Link>
+                            <NavItem href="/login" label="Login" />
                         )
                     }
                 </div>
