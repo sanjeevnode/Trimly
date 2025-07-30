@@ -1,100 +1,116 @@
-import React from 'react'
+"use client"
+
+import CustomButton from '@/components/custom/CustomButton';
+import CustomTextField from '@/components/custom/CustomTextField';
+import React, { useState } from 'react'
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 
 export default function Profile() {
+    const [isLoading, setIsLoading] = useState(false);
+    const {
+        register,
+        handleSubmit,
+    } = useForm<FieldValues>({
+        defaultValues: {
+            name: "",
+            email: "",
+            password: "",
+            cpassword: "",
+        },
+    });
+
+    const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+        setIsLoading(true);
+        try {
+            // Simulate an API call to update user profile
+            console.log("Updating profile with data:", data);
+            // Here you would typically call your API to update the user profile
+            // await api.updateUserProfile(data);
+            await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulating network delay
+        } catch (error) {
+            console.error("Failed to update profile:", error);
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
     return (
-        <div className="min-h-screen bg-gray-50 py-8">
-            <div className="mx-auto max-w-4xl px-4">
-                <div className="mb-8">
-                    <h1 className="text-3xl font-bold gradient-text">Profile</h1>
-                    <p className="text-gray-600 mt-2">Manage your account settings</p>
-                </div>
 
-                <div className="bg-white rounded-lg shadow-sm border p-6">
+        <div className="mx-auto max-w-4xl px-4 py-8">
+            <div className="mb-8">
+                <h1 className="text-3xl font-bold gradient-text">Profile</h1>
+                <p className="text-gray-600 mt-2">Manage your account settings</p>
+            </div>
+
+            <div className="bg-white rounded shadow-sm border p-6">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                    <h2 className="text-xl font-semibold mb-4">Account Settings</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <h2 className="text-xl font-semibold mb-4">Personal Information</h2>
-                            <div className="space-y-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        Full Name
-                                    </label>
-                                    <input
-                                        type="text"
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        placeholder="Enter your full name"
-                                    />
-                                </div>
 
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        Email
-                                    </label>
-                                    <input
-                                        type="email"
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        placeholder="Enter your email"
-                                    />
-                                </div>
+                        <div className="space-y-4">
+                            <CustomTextField
+                                label='Name'
+                                placeholder="Enter your name"
+                                disabled={isLoading}
+                                required
+                                className="w-full"
+                                {...register("name", { required: true })}
+                            />
 
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        Username
-                                    </label>
-                                    <input
-                                        type="text"
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        placeholder="Enter your username"
-                                    />
-                                </div>
-                            </div>
+                            <CustomTextField
+                                type='email'
+                                label='Email Address'
+                                placeholder="Enter your email"
+                                disabled={isLoading}
+                                required
+                                className="w-full"
+                                {...register("email", { required: true })}
+                            />
+
                         </div>
 
-                        <div>
-                            <h2 className="text-xl font-semibold mb-4">Account Settings</h2>
-                            <div className="space-y-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        Current Password
-                                    </label>
-                                    <input
-                                        type="password"
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        placeholder="Enter current password"
-                                    />
-                                </div>
 
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        New Password
-                                    </label>
-                                    <input
-                                        type="password"
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        placeholder="Enter new password"
-                                    />
-                                </div>
 
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                                        Confirm Password
-                                    </label>
-                                    <input
-                                        type="password"
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        placeholder="Confirm new password"
-                                    />
-                                </div>
-                            </div>
+
+                        <div className="space-y-4">
+
+                            <CustomTextField
+                                label='New Password'
+                                placeholder="Enter new password"
+                                disabled={isLoading}
+                                isPassword={true}
+                                required
+                                className="w-full"
+                                {...register("password", { required: true, minLength: 6 })}
+                            />
+
+                            <CustomTextField
+                                label='Confirm Password'
+                                isPassword={true}
+                                placeholder="Confirm new password"
+                                disabled={isLoading}
+                                required
+                                className="w-full"
+                                {...register("cpassword", {
+                                    required: true,
+                                })}
+                            />
                         </div>
                     </div>
 
-                    <div className="mt-6 pt-6 border-t">
-                        <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-md hover:shadow-lg transition-shadow">
+                    <div className='w-full flex justify-end'>
+                        <CustomButton
+                            type="submit"
+                            isLoading={isLoading}
+                            loadingText="Saving..."
+                            className='w-36'
+                        >
                             Save Changes
-                        </button>
+                        </CustomButton>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
+
     )
 }

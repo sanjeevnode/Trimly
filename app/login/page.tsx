@@ -1,7 +1,6 @@
 "use client"
 
-import { Input } from '@/components/ui/input';
-import { Link as LinkIcon, Eye, EyeOff, Loader2Icon } from 'lucide-react'
+import { Link as LinkIcon, Loader2Icon } from 'lucide-react'
 import { signIn, useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react'
@@ -10,12 +9,12 @@ import toast from 'react-hot-toast';
 import { RegisterUserData } from '@/types/registerUserType';
 import { registerUser } from '@/app/actions/userActions';
 import { UserAuthType } from '@/types/user';
+import PasswordTextField from '@/components/custom/CustomTextField';
 
 
 type Variant = "LOGIN" | "REGISTER";
 
 export default function Login() {
-    const [showPassword, setShowPassword] = useState(false)
     const [variant, setVariant] = useState<Variant>("LOGIN");
     const [isLoading, setIsLoading] = useState(false);
     const session = useSession();
@@ -92,7 +91,7 @@ export default function Login() {
             <div className="max-w-md w-full space-y-8">
                 <div className="text-center">
                     <div className="flex justify-center">
-                        <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-3 rounded-lg">
+                        <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-3 rounded">
                             <LinkIcon className="w-8 h-8 text-white" />
                         </div>
                     </div>
@@ -111,7 +110,7 @@ export default function Login() {
                     </p>
                 </div>
 
-                <div className="bg-white rounded-lg shadow-sm border p-8">
+                <div className="bg-white rounded shadow-sm border p-8">
                     <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
                         {
                             variant === "REGISTER" && (
@@ -119,10 +118,10 @@ export default function Login() {
                                     <label className="block text-sm font-medium text-gray-700 mb-1">
                                         Name
                                     </label>
-                                    <Input
+                                    <input
                                         type="text"
                                         required
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                         placeholder="Enter your name"
                                         disabled={isLoading}
                                         {...register("name", { required: true })}
@@ -134,66 +133,29 @@ export default function Login() {
                             <label className="block text-sm font-medium text-gray-700 mb-1">
                                 Email address
                             </label>
-                            <Input
+                            <input
                                 {...register("email", { required: true })}
                                 type="email"
                                 required
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 placeholder="Enter your email"
                                 disabled={isLoading}
                             />
                         </div>
 
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Password
-                            </label>
-                            <div className="relative">
-                                <input
-                                    type={showPassword ? "text" : "password"}
-                                    required
-                                    className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    placeholder="Enter your password"
-                                    disabled={isLoading}
-                                    {...register("password", { required: true, minLength: 6 })}
-                                />
-                                <button
-                                    type="button"
-                                    className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
-                                    onClick={() => setShowPassword(!showPassword)}
-                                    disabled={isLoading}
-                                >
-                                    {showPassword ? (
-                                        <EyeOff className="h-4 w-4 text-gray-400" />
-                                    ) : (
-                                        <Eye className="h-4 w-4 text-gray-400" />
-                                    )}
-                                </button>
-                            </div>
-                        </div>
-
-                        {/* <div className="flex items-center justify-between">
-                            <div className="flex items-center">
-                                <input
-                                    type="checkbox"
-                                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                                />
-                                <label className="ml-2 block text-sm text-gray-700">
-                                    Remember me
-                                </label>
-                            </div>
-
-                            <div className="text-sm">
-                                <a href="#" className="text-blue-600 hover:text-blue-500">
-                                    Forgot your password?
-                                </a>
-                            </div>
-                        </div> */}
+                        <PasswordTextField
+                            label="Password"
+                            placeholder="Enter your password"
+                            disabled={isLoading}
+                            required
+                            className="w-full"
+                            {...register("password", { required: true, minLength: 6 })}
+                        />
 
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-md hover:shadow-lg transition-shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer"
+                            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded hover:shadow-lg transition-shadow focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer"
                         >
                             {isLoading ? (
                                 <div className='flex items-center justify-center gap-2 w-full'>
@@ -223,7 +185,7 @@ export default function Login() {
                                     redirect: false,
                                 })
                             }}
-                            className="mt-6 w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 cursor-pointer">
+                            className="mt-6 w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 cursor-pointer">
                             <svg className="w-5 h-5" viewBox="0 0 24 24">
                                 <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
                                 <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
