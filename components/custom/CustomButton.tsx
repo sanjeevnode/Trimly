@@ -7,6 +7,7 @@ interface CustomButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     isLoading?: boolean;
     loadingText?: string;
     children: React.ReactNode;
+    variant?: 'NORMAL' | 'GRADIENT';
 }
 
 const CustomButton = ({
@@ -15,13 +16,16 @@ const CustomButton = ({
     children,
     disabled,
     className = "",
+    variant = 'GRADIENT',
     ...props
 }: CustomButtonProps) => {
+
+    const gradientClasses = variant === 'GRADIENT' ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white' : 'border text-black';
 
     return (
         <button
             disabled={isLoading || disabled}
-            className={`bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded hover:shadow-lg transition-shadow  cursor-pointer ${className}`}
+            className={`${gradientClasses}  px-4 py-2 rounded hover:shadow transition-shadow  cursor-pointer ${className}`}
             {...props}
         >
             {isLoading ? (
