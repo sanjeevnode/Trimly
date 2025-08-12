@@ -1,7 +1,7 @@
 "use client";
 
 import { SessionProvider, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 
@@ -22,12 +22,17 @@ const AuthContext = ({ children }: AuthContextProps) => {
 const AuthContextProvider = ({ children }: AuthContextProps) => {
     const { status } = useSession();
     const router = useRouter();
+    const path = usePathname();
 
     useEffect(() => {
         if (status === "unauthenticated") {
-            router.push("/login");
+            if (path === "/") {
+                router.push("/");
+            } else {
+                router.push("/login");
+            }
         }
-    }, [router, status]);
+    }, [router, status, path]);
 
     return (
         <>

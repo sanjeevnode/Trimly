@@ -20,7 +20,7 @@ const CustomButton = ({
     ...props
 }: CustomButtonProps) => {
 
-    const gradientClasses = variant === 'GRADIENT' ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white' : 'border text-black';
+    const gradientClasses = variant === 'GRADIENT' ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white' : 'border text-black border-gray-300 hover:bg-gray-50';
 
     return (
         <button

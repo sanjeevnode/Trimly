@@ -9,14 +9,12 @@ type UserState = {
   syncUser: (email: string) => Promise<void>;
 };
 
-export const userStore = create<UserState>((set, get) => ({
+export const userStore = create<UserState>((set) => ({
   user: null,
   setUser: (user) => set({ user }),
   clearUser: () => set({ user: null }),
 
   syncUser: async (email: string) => {
-    if (get().user?.email === email) return;
-
     try {
       const user = await findUserByEmail(email);
       if (user) {

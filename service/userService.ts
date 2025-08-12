@@ -1,7 +1,8 @@
 import connectDB from "@/config/database";
 import { UserAlreadyExistsException } from "@/exceptions";
-import User, { TUser } from "@/models/User";
-import { UserAuthType } from "@/types/user";
+import User from "@/models/User";
+import { TUser, UserAuthType } from "@/types/user";
+import bcrypt from "bcryptjs";
 
 export class UserService {
   // Create a new user
@@ -36,6 +37,7 @@ export class UserService {
 
       // Return plain object without password
       return {
+        id: user._id.toString(),
         name: user.name,
         email: user.email,
         authType: user.authType,
@@ -56,6 +58,7 @@ export class UserService {
       if (!user) return null;
 
       return {
+        id: user._id.toString(),
         name: user.name,
         email: user.email,
         authType: user.authType,
@@ -76,6 +79,7 @@ export class UserService {
       if (!user) return null;
 
       return {
+        id: user._id.toString(),
         name: user.name,
         email: user.email,
         authType: user.authType,
@@ -90,18 +94,41 @@ export class UserService {
   // Update user
   static async updateUser(
     id: string,
-    updateData: Partial<{ name: string; email: string }>
+    updateData: Partial<{ name: string; email: string; password: string }>
   ): Promise<TUser | null> {
     await connectDB();
 
     try {
-      const user = await User.findByIdAndUpdate(id, updateData, {
-        new: true,
-        runValidators: true,
-      });
+      let user = null;
+      if (updateData.password && updateData.password.length >= 6) {
+        user = await User.findByIdAndUpdate(
+          id,
+          {
+            name: updateData.name,
+            password: await this.getHash(updateData.password),
+          },
+          {
+            new: true,
+            runValidators: true,
+          }
+        );
+      } else {
+        user = await User.findByIdAndUpdate(
+          id,
+          {
+            name: updateData.name,
+          },
+          {
+            new: true,
+            runValidators: true,
+          }
+        );
+      }
+
       if (!user) return null;
 
       return {
+        id: user._id.toString(),
         name: user.name,
         email: user.email,
         authType: user.authType,
@@ -145,6 +172,7 @@ export class UserService {
 
       // Return plain object without password
       return {
+        id: user._id.toString(),
         name: user.name,
         email: user.email,
         authType: user.authType,
@@ -175,6 +203,7 @@ export class UserService {
 
       // Convert to plain objects
       const plainUsers: TUser[] = users.map((user) => ({
+        id: user._id.toString(),
         name: user.name,
         email: user.email,
         authType: user.authType,
@@ -186,5 +215,9 @@ export class UserService {
     } catch (error) {
       throw error;
     }
+  }
+
+  static async getHash(text: string): Promise<string> {
+    return await bcrypt.hash(text, 12);
   }
 }

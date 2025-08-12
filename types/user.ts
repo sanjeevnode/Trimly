@@ -4,6 +4,7 @@ export enum UserAuthType {
 }
 
 export type TUser = {
+  id: string;
   name: string;
   email: string;
   authType: UserAuthType;

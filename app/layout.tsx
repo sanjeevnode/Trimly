@@ -30,8 +30,8 @@ export default function RootLayout({
           <StoreContext>
             <ToasterContext />
             <Navbar />
-            <div className="flex flex-col items-center min-h-screen pt-16 px-4">
-              <main className="w-full max-w-7xl flex-grow">{children}</main>
+            <div className="flex flex-col items-center h-screen pt-16 px-4">
+              <main className="w-full max-w-7xl flex-1">{children}</main>
               <Footer />
             </div>
           </StoreContext>

@@ -16,7 +16,7 @@ import { useState } from "react"
 export default function Navbar() {
     const session = useSession();
     return (
-        <nav className="fixed top-0 w-full border h-16 bg-white z-50">
+        <nav className="fixed top-0 w-full h-16 bg-white z-50">
             <div className="mx-auto max-w-7xl flex items-center justify-between px-4 py-2  h-full">
                 <Link href="/" className="flex items-center">
                     <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-1 rounded">

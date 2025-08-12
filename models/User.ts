@@ -13,14 +13,6 @@ export interface IUser extends Document {
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
 
-export type TUser = {
-  name: string;
-  email: string;
-  authType: UserAuthType;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
 // Simple User schema
 const UserSchema = new Schema(
   {

@@ -37,6 +37,23 @@ export async function findUserByEmail(email: string) {
     return user;
   } catch (error) {
     console.error("Error finding user by email:", error);
-    throw new Error("Failed to find user");
+    return null;
+  }
+}
+
+export async function updateUser({
+  id,
+  updateData,
+}: {
+  id: string;
+  updateData: Partial<{ name: string; email: string; password: string }>;
+}) {
+  try {
+    await connectToDB();
+    const user = await UserService.updateUser(id, updateData);
+    return user;
+  } catch (error) {
+    console.error("Error updating user:", error);
+    throw new Error("Failed to update user");
   }
 }

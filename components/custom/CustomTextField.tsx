@@ -12,6 +12,7 @@ interface CustomTextFieldProps {
     error?: string;
     isPassword?: boolean;
     type?: string;
+    icon?: React.ReactNode;
 }
 
 const CustomTextField = forwardRef<HTMLInputElement, CustomTextFieldProps>(
@@ -24,6 +25,7 @@ const CustomTextField = forwardRef<HTMLInputElement, CustomTextFieldProps>(
         error,
         isPassword = false,
         type = "text",
+        icon,
         ...props
     }, ref) => {
         const [showPassword, setShowPassword] = useState(false);
@@ -38,11 +40,16 @@ const CustomTextField = forwardRef<HTMLInputElement, CustomTextFieldProps>(
                     </label>
                 )}
                 <div className="relative">
+                    {icon && (
+                        <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+                            {icon}
+                        </div>
+                    )}
                     <input
                         ref={ref}
                         type={inputType}
                         required={required}
-                        className={`w-full px-3 py-2 ${isPassword ? 'pr-10' : 'pr-3'} border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${error ? 'border-red-500' : ''} ${className}`}
+                        className={`w-full ${icon ? "pl-10" : "pl-3"} py-2 ${isPassword ? 'pr-10' : 'pr-3'} border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent ${error ? 'border-red-500' : ''} ${className}`}
                         placeholder={placeholder}
                         disabled={disabled}
                         {...props}
