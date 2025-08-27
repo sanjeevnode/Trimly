@@ -41,4 +41,33 @@ export class ShortUserService {
     }
     return result;
   }
+
+  static async getOriginalUrl(shortUrl: string): Promise<string | null> {
+    try {
+      await connectDB();
+      const urlDoc = await ShortUrl.findOne({ shortUrl });
+
+      if (!urlDoc) {
+        return null;
+      }
+
+      // Increment the clicked counter
+      await ShortUrl.updateOne({ shortUrl }, { $inc: { clicked: 1 } });
+
+      let originalUrl = urlDoc.originalUrl;
+
+      // Ensure the URL has a protocol
+      if (
+        !originalUrl.startsWith("http://") &&
+        !originalUrl.startsWith("https://")
+      ) {
+        originalUrl = "https://" + originalUrl;
+      }
+
+      return originalUrl;
+    } catch (error) {
+      console.error("Error finding short URL:", error);
+      return null;
+    }
+  }
 }
