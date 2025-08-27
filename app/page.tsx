@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import { createShortUrl } from './actions/shortUrlActions';
 
 
 export default function Homepage() {
@@ -20,11 +21,13 @@ export default function Homepage() {
   const [url, setUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { register, handleSubmit, reset } = useForm<FieldValues>({
+  const { register, handleSubmit, reset, watch } = useForm<FieldValues>({
     defaultValues: {
       url: '',
     },
   });
+
+  const urlValue = watch('url');
 
   const handleCopy = () => {
     navigator.clipboard.writeText(trimedUrl || '');
@@ -42,9 +45,9 @@ export default function Homepage() {
       const { url } = data;
       if (!url) return;
       console.log(data);
-      setTimeout(() => setCopied(false), 3000);
+      const shortUrlData = await createShortUrl(url, user.id);
       setUrl(url);
-      setTrimedUrl('http://short.url');
+      setTrimedUrl(shortUrlData.shortUrl);
     } catch (error) {
       console.error(error);
       toast.error('Failed to trim URL');
@@ -77,7 +80,6 @@ export default function Homepage() {
           disabled={isLoading}
           {...register("url", { required: true })}
         />
-
         <CustomButton
           type="submit"
           isLoading={isLoading}
@@ -86,10 +88,13 @@ export default function Homepage() {
         >
           <span className="font-medium">
             {
-              user ?
+              urlValue?.length === 0 ?
                 <span>Trim Url</span>
                 :
-                <span>Login to Trim Url</span>
+                user ?
+                  <span>Trim Url</span>
+                  :
+                  <span>Login to Trim Url</span>
             }
           </span>
         </CustomButton>
