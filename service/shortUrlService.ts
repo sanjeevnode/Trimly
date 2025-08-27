@@ -2,6 +2,8 @@ import connectDB from "@/config/database";
 import ShortUrl from "@/models/ShortUrl";
 import { TShortUrl } from "@/types/shortUrl";
 
+const BASE_URL = process.env.BASE_URL as string;
+
 export class ShortUserService {
   static async createShortUrl(
     originalUrl: string,
@@ -14,7 +16,7 @@ export class ShortUserService {
         const url = await ShortUrl.create({ originalUrl, shortUrl, userId });
         return {
           originalUrl: originalUrl,
-          shortUrl: url.shortUrl,
+          shortUrl: BASE_URL + url.shortUrl,
           userId: userId,
           clicked: url.clicked,
         };
