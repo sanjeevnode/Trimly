@@ -31,14 +31,14 @@ export default function Navbar() {
                         session.status === "authenticated" && (
                             <>
 
-                                <NavItem href="/dashboard" label="Dashboard" />
+                                {/* <NavItem href="/dashboard" label="Dashboard" /> */}
 
                                 <NavItem href="/profile" label="Profile" />
                             </>
                         )
                     }
 
-                    <NavItem href="/contact" label="Contact" />
+                    {/* <NavItem href="/contact" label="Contact" /> */}
 
                     {
                         session.status === "authenticated" ? (
@@ -91,13 +91,13 @@ const MobileNavbar = () => {
                         {
                             session.status === "authenticated" && (
                                 <>
-                                    <NavItem
+                                    {/* <NavItem
                                         decoration={false}
                                         href="/dashboard"
                                         label="Dashboard"
                                         className="w-full flex items-center justify-center"
                                         onClick={() => setOpen(false)}
-                                    />
+                                    /> */}
 
                                     <NavItem
                                         decoration={false}
@@ -110,13 +110,13 @@ const MobileNavbar = () => {
                             )
                         }
 
-                        <NavItem
+                        {/* <NavItem
                             decoration={false}
                             href="/contact"
                             label="Contact"
                             className="w-full flex items-center justify-center"
                             onClick={() => setOpen(false)}
-                        />
+                        /> */}
 
                         {
                             session.status === "authenticated" ? (
